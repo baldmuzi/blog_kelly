@@ -1,0 +1,32 @@
+---
+import { getCollection, render } from 'astro:content'
+import BaseLayout from '../../layouts/BaseLayout.astro'
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog')
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+}
+
+const { post } = Astro.props
+const { Content } = await render(post)
+const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.pubDate)
+---
+
+<BaseLayout title={`${post.data.title} — blog_ljx`} description={post.data.description}>
+  <main class="mx-auto w-full max-w-6xl border-x border-t border-ink/25">
+    <article class="grid grid-cols-12">
+      <header class="col-span-12 border-b border-ink/25 p-6 sm:col-span-8 sm:border-r sm:p-10 lg:p-14">
+        <p class="mb-8 text-sm font-medium tracking-wide text-signal">{date}</p>
+        <h1 class="text-4xl font-bold leading-tight tracking-[-0.06em] sm:text-6xl">{post.data.title}</h1>
+        <p class="mt-7 max-w-xl text-lg leading-7">{post.data.description}</p>
+      </header>
+      <aside class="col-span-12 flex items-end p-6 sm:col-span-4 sm:p-10">
+        <div>
+          <p class="mb-2 text-xs font-medium tracking-wide">标签</p>
+          <p class="text-sm">{post.data.tags.join(' / ')}</p>
+        </div>
+      </aside>
+      <div class="post-copy col-span-12 p-6 sm:col-span-8 sm:p-10 lg:p-14"><Content /></div>
+    </article>
+  </main>
+</BaseLayout>

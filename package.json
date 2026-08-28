@@ -1,0 +1,25 @@
+{
+  "name": "blog_ljx",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "check": "astro check"
+  },
+  "dependencies": {
+    "@astrojs/vue": "^5.1.0",
+    "@tailwindcss/vite": "^4.3.3",
+    "@vue/server-renderer": "^3.5.0",
+    "astro": "^5.0.0",
+    "tailwindcss": "^4.3.3",
+    "vue": "^3.5.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,50 @@
+---
+import '../styles/global.css'
+import ThemeToggle from '../components/ThemeToggle.vue'
+import { withBase } from '../utils/links'
+
+interface Props {
+  title?: string
+  description?: string
+}
+
+const {
+  title = 'blog_ljx',
+  description = 'LJX 的个人博客',
+} = Astro.props
+
+const navItems = [
+  { href: '/', label: '首页' },
+  { href: '/blog', label: '文章' },
+  { href: '/about', label: '关于' },
+]
+---
+
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="description" content={description} />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <div class="page-grid min-h-screen">
+      <header class="mx-auto grid w-full max-w-6xl grid-cols-12 border-x border-ink/25 px-4 sm:px-6">
+        <a href={withBase()} class="col-span-7 py-5 text-xl font-bold tracking-[-0.06em] sm:col-span-8">LJX / NOTES</a>
+        <nav class="col-span-5 flex items-center justify-end gap-3 border-l border-ink/25 text-xs sm:gap-6 sm:text-sm" aria-label="主导航">
+          {navItems.map((item) => (
+            <a class="nav-link" href={withBase(item.href)}>{item.label}</a>
+          ))}
+          <ThemeToggle client:load />
+        </nav>
+      </header>
+      <slot />
+      <footer class="mx-auto flex w-full max-w-6xl justify-between border-x border-t border-ink/25 px-4 py-5 text-xs sm:px-6">
+        <span>© {new Date().getFullYear()} LJX</span>
+        <span>Built with Astro + Vue + Tailwind CSS</span>
+      </footer>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,29 @@
+---
+import { getCollection } from 'astro:content'
+import BaseLayout from '../layouts/BaseLayout.astro'
+import PostList from '../components/PostList.astro'
+import { withBase } from '../utils/links'
+
+const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+---
+
+<BaseLayout title="blog_ljx — LJX 的个人博客">
+  <main class="mx-auto w-full max-w-6xl border-x border-ink/25">
+    <section class="grid grid-cols-12 border-t border-ink/25">
+      <div class="col-span-12 p-6 sm:col-span-8 sm:p-10 lg:p-14">
+        <p class="mb-8 text-sm font-medium tracking-wide text-signal">个人博客 / 持续记录</p>
+        <h1 class="max-w-3xl text-5xl font-bold leading-[0.95] tracking-[-0.07em] sm:text-7xl">把思考写下来，留给未来的自己。</h1>
+      </div>
+      <div class="col-span-12 flex items-end border-t border-ink/25 p-6 sm:col-span-4 sm:border-l sm:border-t-0 sm:p-10">
+        <p class="max-w-xs text-lg leading-7">这里收集关于开发、学习和日常观察的笔记。内容保持简单，也保持诚实。</p>
+      </div>
+    </section>
+    <section class="p-4 sm:p-6">
+      <div class="mb-4 flex items-baseline justify-between">
+        <h2 class="text-xl font-semibold tracking-tight">最新文章</h2>
+        <a class="nav-link text-sm" href={withBase('/blog')}>查看全部</a>
+      </div>
+      <PostList posts={posts.slice(0, 4)} />
+    </section>
+  </main>
+</BaseLayout>
