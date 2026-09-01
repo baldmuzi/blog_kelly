@@ -13,20 +13,81 @@ const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', 
 ---
 
 <BaseLayout title={`${post.data.title} — blog_ljx`} description={post.data.description}>
-  <main class="mx-auto w-full max-w-6xl border-x border-t border-ink/25">
+  <main class="mx-auto w-full max-w-7xl border-x border-t border-ink/25">
     <article class="grid grid-cols-12">
-      <header class="col-span-12 border-b border-ink/25 p-6 sm:col-span-8 sm:border-r sm:p-10 lg:p-14">
+      <header class="col-span-12 border-b border-ink/25 p-6 sm:col-span-9 sm:border-r sm:p-10 lg:p-14">
         <p class="mb-8 text-sm font-medium tracking-wide text-signal">{date}</p>
         <h1 class="text-4xl font-bold leading-tight tracking-[-0.06em] sm:text-6xl">{post.data.title}</h1>
         <p class="mt-7 max-w-xl text-lg leading-7">{post.data.description}</p>
       </header>
-      <aside class="col-span-12 flex items-end p-6 sm:col-span-4 sm:p-10">
+      <aside class="col-span-12 flex items-end border-b border-ink/25 p-6 sm:col-span-3 sm:border-b-0 sm:p-10">
         <div>
           <p class="mb-2 text-xs font-medium tracking-wide">标签</p>
           <p class="text-sm">{post.data.tags.join(' / ')}</p>
         </div>
       </aside>
-      <div class="post-copy col-span-12 p-6 sm:col-span-8 sm:p-10 lg:p-14"><Content /></div>
+      <div class="post-copy col-span-12 p-6 sm:col-span-10 sm:p-10 lg:p-14"><Content /></div>
     </article>
   </main>
+
+  <div class="image-lightbox" data-image-lightbox hidden aria-hidden="true">
+    <div class="image-lightbox__backdrop" data-lightbox-close></div>
+    <div class="image-lightbox__panel" role="dialog" aria-modal="true" aria-label="图片预览">
+      <div class="image-lightbox__toolbar">
+        <p class="image-lightbox__caption" data-lightbox-caption></p>
+        <button class="image-lightbox__close" type="button" data-lightbox-close>关闭</button>
+      </div>
+      <img class="image-lightbox__image" data-lightbox-image alt="" />
+    </div>
+  </div>
+
+  <script>
+    const copy = document.querySelector<HTMLElement>('.post-copy')
+    const lightbox = document.querySelector<HTMLElement>('[data-image-lightbox]')
+    const preview = lightbox?.querySelector<HTMLImageElement>('[data-lightbox-image]')
+    const caption = lightbox?.querySelector<HTMLElement>('[data-lightbox-caption]')
+    const closeTargets = lightbox?.querySelectorAll<HTMLElement>('[data-lightbox-close]')
+    let lastFocusedImage: HTMLImageElement | undefined
+
+    const closeLightbox = () => {
+      if (!lightbox || !preview) return
+      lightbox.hidden = true
+      lightbox.setAttribute('aria-hidden', 'true')
+      preview.removeAttribute('src')
+      document.body.classList.remove('lightbox-open')
+      lastFocusedImage?.focus()
+    }
+
+    const openLightbox = (image: HTMLImageElement) => {
+      if (!lightbox || !preview) return
+      lastFocusedImage = image
+      preview.src = image.currentSrc || image.src
+      preview.alt = image.alt
+      if (caption) caption.textContent = image.alt
+      lightbox.hidden = false
+      lightbox.setAttribute('aria-hidden', 'false')
+      document.body.classList.add('lightbox-open')
+      lightbox.querySelector<HTMLElement>('[data-lightbox-close]')?.focus()
+    }
+
+    copy?.querySelectorAll<HTMLImageElement>('img').forEach((image) => {
+      image.loading = 'lazy'
+      image.decoding = 'async'
+      image.tabIndex = 0
+      image.setAttribute('role', 'button')
+      image.setAttribute('aria-label', `查看大图：${image.alt}`)
+      image.addEventListener('click', () => openLightbox(image))
+      image.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault()
+          openLightbox(image)
+        }
+      })
+    })
+
+    closeTargets?.forEach((target) => target.addEventListener('click', closeLightbox))
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox()
+    })
+  </script>
 </BaseLayout>

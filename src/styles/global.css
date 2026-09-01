@@ -41,7 +41,20 @@
   }
 
   .post-copy {
-    @apply max-w-2xl text-[1.05rem] leading-8;
+    @apply max-w-none text-[1.05rem] leading-8;
+  }
+
+  .post-copy > img {
+    @apply my-8 block w-full cursor-zoom-in border border-ink/15 bg-white object-contain p-1 transition-transform duration-200;
+  }
+
+  .post-copy > img:hover,
+  .post-copy > img:focus-visible {
+    @apply -translate-y-0.5 border-signal/60 outline-none;
+  }
+
+  .post-copy > img:focus-visible {
+    box-shadow: 0 0 0 3px rgb(228 0 43 / 0.2);
   }
 
   .post-copy h2 {
@@ -54,5 +67,41 @@
 
   .post-copy code {
     @apply bg-ink/8 px-1 py-0.5 font-mono text-[0.9em];
+  }
+
+  .lightbox-open {
+    overflow: hidden;
+  }
+
+  .image-lightbox[hidden] {
+    display: none;
+  }
+
+  .image-lightbox {
+    @apply fixed inset-0 z-50 grid place-items-center p-4 sm:p-8;
+  }
+
+  .image-lightbox__backdrop {
+    @apply absolute inset-0 bg-ink/85;
+  }
+
+  .image-lightbox__panel {
+    @apply relative z-10 flex max-h-full w-full max-w-6xl flex-col border border-white/25 bg-paper p-3 shadow-2xl sm:p-5;
+  }
+
+  .image-lightbox__toolbar {
+    @apply flex items-start justify-between gap-4 border-b border-ink/20 pb-3;
+  }
+
+  .image-lightbox__caption {
+    @apply m-0 text-sm leading-6;
+  }
+
+  .image-lightbox__close {
+    @apply shrink-0 border border-ink/30 px-3 py-1 text-xs transition-colors hover:border-signal hover:text-signal focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-signal;
+  }
+
+  .image-lightbox__image {
+    @apply mt-4 max-h-[calc(100vh-9rem)] w-full object-contain;
   }
 }
