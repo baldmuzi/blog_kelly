@@ -2,15 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro'
 ---
 
-<BaseLayout title="关于 — blog_ljx">
-  <main class="mx-auto w-full max-w-6xl border-x border-t border-ink/25">
-    <section class="grid grid-cols-12">
-      <h1 class="col-span-12 border-b border-ink/25 p-6 text-5xl font-bold tracking-[-0.07em] sm:col-span-8 sm:border-r sm:p-14 sm:text-7xl">关于</h1>
-      <div class="col-span-12 p-6 sm:col-span-4 sm:p-10"><p class="text-lg leading-7">一个为记录而建的轻量博客。</p></div>
-      <div class="post-copy col-span-12 p-6 sm:col-span-8 sm:p-14">
-        <p>blog_ljx 使用 Astro 生成静态页面，用 Vue 承担需要交互的小组件，并用 Tailwind CSS 组织样式。</p>
-        <p>你可以把这里替换成自己的简介、联系方式和正在关注的方向。</p>
-      </div>
-    </section>
-  </main>
+<BaseLayout title="关于 — LJX Notes">
+  <main class="page-stack"><section class="about-grid"><div class="bento-card about-title"><p class="eyebrow">关于</p><h1>为记录，<br />也为回看。</h1></div><div class="bento-card about-copy"><p>这是一个为记录而建的轻量博客。</p><p>blog_ljx 使用 Astro 生成静态页面，用 Vue 承担需要交互的小组件，并用 Tailwind CSS 组织样式。</p><p>这里会持续沉淀学习过程、开发笔记和日常观察。</p></div><div class="bento-card about-note"><p class="eyebrow">写作方向</p><p>开发 · 学习 · 日常观察</p></div></section></main>
 </BaseLayout>

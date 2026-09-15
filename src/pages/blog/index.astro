@@ -4,14 +4,13 @@ import BaseLayout from '../../layouts/BaseLayout.astro'
 import PostList from '../../components/PostList.astro'
 
 const posts = (await getCollection('blog')).sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+const tags = [...new Set(posts.flatMap((post) => post.data.tags))]
 ---
 
-<BaseLayout title="文章 — blog_ljx">
-  <main class="mx-auto w-full max-w-6xl border-x border-t border-ink/25 p-4 sm:p-6">
-    <div class="mb-10 grid grid-cols-12 gap-4">
-      <h1 class="col-span-12 text-4xl font-bold tracking-[-0.06em] sm:col-span-8 sm:text-5xl">全部文章</h1>
-      <p class="col-span-12 text-sm leading-6 sm:col-span-4">按时间倒序整理。新的文章会直接出现在这里。</p>
-    </div>
-    <PostList posts={posts} />
+<BaseLayout title="文章 — LJX Notes">
+  <main class="page-stack">
+    <section class="archive-header bento-card"><div><p class="eyebrow">文章归档</p><h1>所有记录</h1></div><p>按时间倒序整理。新的文章会直接出现在这里。</p></section>
+    {tags.length > 0 && <section class="tag-index bento-card" aria-label="文章标签"><p class="eyebrow">主题</p><div class="tag-index__items">{tags.map((tag) => <span>{tag}</span>)}</div></section>}
+    <PostList posts={posts} variant="list" />
   </main>
 </BaseLayout>
