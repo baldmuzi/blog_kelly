@@ -1,16 +1,13 @@
 ---
 import '../styles/global.css'
 import ThemeToggle from '../components/ThemeToggle.vue'
+import Avatar from '../components/Avatar.astro'
 import { withBase } from '../utils/links'
+import { siteConfig, navItems } from '../utils/site'
 
 interface Props { title?: string; description?: string }
 
-const { title = 'LJX Notes', description = 'LJX 的个人博客，记录开发、学习和日常观察。' } = Astro.props
-const navItems = [
-  { href: '/', label: '首页' },
-  { href: '/blog', label: '文章' },
-  { href: '/about', label: '关于' },
-]
+const { title = `${siteConfig.name} — ${siteConfig.author} 的个人博客`, description = siteConfig.bio } = Astro.props
 ---
 
 <!doctype html>
@@ -29,18 +26,31 @@ const navItems = [
   <body>
     <div class="site-shell">
       <header class="site-header">
-        <a href={withBase()} class="wordmark" aria-label="LJX Notes 首页">
-          <span class="wordmark__main">ljx</span><span class="wordmark__sub">notes</span>
+        <a href={withBase()} class="wordmark" aria-label={`${siteConfig.name} 首页`}>
+          <Avatar size="sm" />
+          <span class="wordmark__text">{siteConfig.name}</span>
         </a>
         <nav class="site-nav" aria-label="主导航">
           {navItems.map((item) => (
             <a class:list={['site-nav__link', { 'is-active': Astro.url.pathname === withBase(item.href) }]} href={withBase(item.href)}>{item.label}</a>
           ))}
-          <ThemeToggle client:load />
         </nav>
+        <div class="site-header__actions">
+          {siteConfig.social.map((link) => (
+            <a class="social-link" href={link.href} target="_blank" rel="noreferrer"><span aria-hidden="true">↗</span> {link.label}</a>
+          ))}
+          <ThemeToggle client:load />
+        </div>
       </header>
       <slot />
-      <footer class="site-footer"><span>© {new Date().getFullYear()} LJX</span><span>使用 Astro 构建</span></footer>
+      <footer class="site-footer">
+        <span>© {new Date().getFullYear()} {siteConfig.author}. Built with care.</span>
+        <div class="site-footer__links">
+          {siteConfig.social.map((link) => (
+            <a class="social-link" href={link.href} target="_blank" rel="noreferrer"><span aria-hidden="true">↗</span> {link.label}</a>
+          ))}
+        </div>
+      </footer>
     </div>
   </body>
 </html>

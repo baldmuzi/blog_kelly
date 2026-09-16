@@ -1,7 +1,110 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro'
+import Avatar from '../components/Avatar.astro'
+import { siteConfig } from '../utils/site'
+
+const experience = [
+  {
+    period: '2024.03 — 至今',
+    title: '前端开发工程师',
+    org: '[公司/团队名称]',
+    description: '负责官网与内部管理后台的前端开发，主导了一套内部组件库的设计与落地，推动团队构建时间下降 60%。',
+  },
+  {
+    period: '2023.06 — 2024.02',
+    title: '前端开发实习生',
+    org: '[实习公司名称]',
+    description: '参与核心产品的前端迭代，负责需求评审到上线的完整流程，协助搭建了团队的可视化埋点方案。',
+  },
+  {
+    period: '2020.09 — 2024.06',
+    title: '计算机科学与技术 · 本科',
+    org: '[学校名称]',
+    description: '在校期间加入技术社团，担任核心成员，带队完成多个课程设计与创新创业项目。',
+  },
+]
+
+const projects = [
+  {
+    title: '团队官网重构',
+    tags: ['React', '性能优化'],
+    description: '从零搭建团队官网，负责组件库沉淀与首屏性能优化，Lighthouse 评分从 62 提升到 96。',
+  },
+  {
+    title: '中文全文搜索引擎',
+    tags: ['Go', '开源'],
+    description: '独立实现的轻量级搜索服务，支持中文分词与倒排索引，已开源在 GitHub。',
+  },
+  {
+    title: '命令行效率工具',
+    tags: ['Rust', '工具'],
+    description: '用 Rust 重写的一套个人命令行工具集，启动速度和内存占用相比原版分别提升数倍。',
+  },
+]
+
+const honors = [
+  { icon: '🏆', title: '「互联网+」大学生创新创业大赛 省级银奖', year: '2023 年' },
+  { icon: '🥉', title: '全国大学生计算机设计大赛 三等奖', year: '2023 年' },
+  { icon: '📜', title: '前端进阶训练营 结业证书', year: '2023 年' },
+  { icon: '🏆', title: '"挑战杯"大学生创业计划竞赛 省级银奖', year: '2022 年' },
+  { icon: '👤', title: '校级优秀学生干部', year: '2022 年' },
+  { icon: '🌱', title: '开源贡献活动 优秀贡献者', year: '2021 年' },
+]
 ---
 
-<BaseLayout title="关于 — LJX Notes">
-  <main class="page-stack"><section class="about-grid"><div class="bento-card about-title"><p class="eyebrow">关于</p><h1>为记录，<br />也为回看。</h1></div><div class="bento-card about-copy"><p>这是一个为记录而建的轻量博客。</p><p>blog_ljx 使用 Astro 生成静态页面，用 Vue 承担需要交互的小组件，并用 Tailwind CSS 组织样式。</p><p>这里会持续沉淀学习过程、开发笔记和日常观察。</p></div><div class="bento-card about-note"><p class="eyebrow">写作方向</p><p>开发 · 学习 · 日常观察</p></div></section></main>
+<BaseLayout title={`关于我 — ${siteConfig.name}`}>
+  <main class="page-stack">
+    <section class="profile-hero bento-card">
+      <Avatar size="lg" />
+      <div class="profile-hero__content">
+        <p class="eyebrow">关于我</p>
+        <h1>{siteConfig.author}</h1>
+        <p class="profile-hero__bio">{siteConfig.bio}这个页面整理了我的经历、做过的项目，以及一些获得过的奖项和认证。</p>
+        <div class="tag-pills">
+          {siteConfig.tags.map((tag) => <span class="tag-pill">{tag}</span>)}
+        </div>
+        <div class="profile-hero__links">
+          {siteConfig.social.map((link) => (
+            <a class="social-link" href={link.href} target="_blank" rel="noreferrer"><span aria-hidden="true">↗</span> {link.label}</a>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <section class="section-heading"><div><p class="eyebrow">经历</p><h2>工作与教育</h2></div></section>
+    <ol class="timeline bento-card">
+      {experience.map((item) => (
+        <li class="timeline__item">
+          <p class="timeline__period">{item.period}</p>
+          <h3 class="timeline__title">{item.title}</h3>
+          <p class="timeline__org">{item.org}</p>
+          <p class="timeline__description">{item.description}</p>
+        </li>
+      ))}
+    </ol>
+
+    <section class="section-heading"><div><p class="eyebrow">项目经历</p><h2>做过的项目</h2></div></section>
+    <div class="project-grid">
+      {projects.map((project) => (
+        <div class="bento-card project-card">
+          <h3>{project.title}</h3>
+          <p>{project.description}</p>
+          <div class="tag-index__items">{project.tags.map((tag) => <span>#{tag}</span>)}</div>
+        </div>
+      ))}
+    </div>
+
+    <section class="section-heading"><div><p class="eyebrow">荣誉与获奖</p><h2>获得过的认可</h2></div></section>
+    <div class="honor-grid">
+      {honors.map((honor) => (
+        <div class="bento-card honor-card">
+          <span class="honor-card__icon" aria-hidden="true">{honor.icon}</span>
+          <div>
+            <p class="honor-card__title">{honor.title}</p>
+            <p class="honor-card__year">{honor.year}</p>
+          </div>
+        </div>
+      ))}
+    </div>
+  </main>
 </BaseLayout>

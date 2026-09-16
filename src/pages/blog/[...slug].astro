@@ -1,31 +1,88 @@
 ---
 import { getCollection, render } from 'astro:content'
 import BaseLayout from '../../layouts/BaseLayout.astro'
+import Avatar from '../../components/Avatar.astro'
+import { withBase } from '../../utils/links'
+import { siteConfig } from '../../utils/site'
+import { estimateReadingTime } from '../../utils/reading-time'
 
 export async function getStaticPaths() {
   const posts = await getCollection('blog')
-  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }))
+  const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+  return sorted.map((post, index) => ({
+    params: { slug: post.id },
+    props: { post, prevPost: sorted[index + 1] ?? null, nextPost: index > 0 ? sorted[index - 1] : null },
+  }))
 }
 
-const { post } = Astro.props
-const { Content } = await render(post)
+const { post, prevPost, nextPost } = Astro.props
+const { Content, headings } = await render(post)
 const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', day: 'numeric' }).format(post.data.pubDate)
+const readingTime = estimateReadingTime(post.body ?? '')
+const toc = headings.filter((heading) => heading.depth === 2)
 ---
 
-<BaseLayout title={`${post.data.title} — LJX Notes`} description={post.data.description}>
+<BaseLayout title={`${post.data.title} — ${siteConfig.name}`} description={post.data.description}>
   <main class="page-stack">
+    <nav class="breadcrumb" aria-label="面包屑导航">
+      <a href={withBase('/')}>首页</a>
+      <span aria-hidden="true">/</span>
+      <a href={withBase('/blog')}>{post.data.category}</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{post.data.title}</span>
+    </nav>
+
     <article class="article-layout">
       <header class="article-header bento-card">
-        <p class="eyebrow">{date}</p>
+        <span class="category-pill">{post.data.category}</span>
         <h1>{post.data.title}</h1>
-        <p class="article-header__description">{post.data.description}</p>
+        <p class="article-header__meta">{date} · {readingTime} 分钟阅读 · {siteConfig.author}</p>
       </header>
-      <aside class="article-meta bento-card">
-        <p class="eyebrow">标签</p>
-        <p class="article-meta__tags">{post.data.tags.length ? post.data.tags.join(' · ') : '未分类'}</p>
+
+      <aside class="article-side bento-card">
+        {toc.length > 0 && (
+          <div class="article-side__section">
+            <p class="eyebrow">目录</p>
+            <ul class="toc-list" data-toc>
+              {toc.map((heading) => (
+                <li><a href={`#${heading.slug}`} data-toc-link={heading.slug}>{heading.text}</a></li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div class="article-side__section author-card">
+          <Avatar size="sm" />
+          <div>
+            <p class="author-card__name">{siteConfig.author}</p>
+            <p class="author-card__role">{siteConfig.role}</p>
+          </div>
+        </div>
       </aside>
-      <div class="post-copy bento-card"><Content /></div>
+
+      <div class="post-copy bento-card">
+        <Content />
+        {post.data.tags.length > 0 && (
+          <div class="tag-index__items post-copy__tags">
+            {post.data.tags.map((tag) => <span>#{tag}</span>)}
+          </div>
+        )}
+      </div>
     </article>
+
+    <nav class="post-nav" aria-label="上一篇下一篇">
+      {prevPost ? (
+        <a class="post-nav__item post-nav__item--prev bento-card" href={withBase(`/blog/${prevPost.id}`)}>
+          <span class="eyebrow">← 上一篇</span>
+          <span class="post-nav__title">{prevPost.data.title}</span>
+        </a>
+      ) : <span />}
+      {nextPost ? (
+        <a class="post-nav__item post-nav__item--next bento-card" href={withBase(`/blog/${nextPost.id}`)}>
+          <span class="eyebrow">下一篇 →</span>
+          <span class="post-nav__title">{nextPost.data.title}</span>
+        </a>
+      ) : <span />}
+    </nav>
   </main>
 
   <div class="image-lightbox" data-image-lightbox hidden aria-hidden="true">
@@ -87,5 +144,21 @@ const date = new Intl.DateTimeFormat('zh-CN', { year: 'numeric', month: 'long', 
     document.addEventListener('keydown', (event) => {
       if (event.key === 'Escape' && lightbox && !lightbox.hidden) closeLightbox()
     })
+
+    const tocLinks = document.querySelectorAll<HTMLAnchorElement>('[data-toc-link]')
+    const headingEls = [...tocLinks].map((link) => document.getElementById(link.dataset.tocLink ?? ''))
+    if (tocLinks.length && headingEls.length) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (!entry.isIntersecting) continue
+            const id = entry.target.id
+            tocLinks.forEach((link) => link.classList.toggle('is-active', link.dataset.tocLink === id))
+          }
+        },
+        { rootMargin: '-20% 0px -70% 0px' },
+      )
+      headingEls.forEach((el) => el && observer.observe(el))
+    }
   </script>
 </BaseLayout>
