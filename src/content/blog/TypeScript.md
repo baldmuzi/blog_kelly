@@ -2,10 +2,9 @@
 title: TypeScript 概论及运用
 description: 从 TypeScript 的诞生背景、类型系统到安装使用，快速梳理这门语言为什么适合大型前端项目。
 pubDate: 2023-05-14
-category: 前端开发
+category: 前端技能
 tags:
   - TypeScript
-  - 前端
   - 学习笔记
 ---
 

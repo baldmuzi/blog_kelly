@@ -2,6 +2,7 @@ import { defineConfig } from 'astro/config'
 import vue from '@astrojs/vue'
 import react from '@astrojs/react'
 import tailwindcss from '@tailwindcss/vite'
+import remarkBreaks from 'remark-breaks'
 
 const [owner, repository] = (process.env.GITHUB_REPOSITORY ?? 'owner/blog_ljx').split('/')
 const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === 'true'
@@ -11,6 +12,9 @@ export default defineConfig({
   site: isGitHubPagesBuild ? `https://${owner}.github.io/${repository}/` : undefined,
   base: isGitHubPagesBuild ? `/${repository}` : '',
   integrations: [vue(), react()],
+  markdown: {
+    remarkPlugins: [remarkBreaks],
+  },
   vite: {
     plugins: [tailwindcss()],
   },
