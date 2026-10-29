@@ -1,7 +1,7 @@
 ---
 title: 基于github+codex实现的ai自动化日报
 description: 一套以 Git 仓库为内容数据库的自动化情报发布系统：远程 AI 任务按频道生成静态内容，GitHub Pages 承载，Actions 再根据本次变更发送给企业微信webhook机器人推送日报。
-pubDate: 2023-05-14
+pubDate: 2026-06-01
 category: 效率工具
 tags:
   - ai自动化
