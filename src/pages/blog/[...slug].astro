@@ -7,7 +7,7 @@ import { siteConfig } from '../../utils/site'
 import { estimateReadingTime } from '../../utils/reading-time'
 
 export async function getStaticPaths() {
-  const posts = await getCollection('blog')
+  const posts = await getCollection('blog', ({ data }) => !data.draft)
   const sorted = posts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
   return sorted.map((post, index) => ({
     params: { slug: post.id },
