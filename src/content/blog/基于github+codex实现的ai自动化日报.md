@@ -13,7 +13,7 @@ tags:
 - 线上日报中心：[AI 自动化日报中心](https://baldmuzi.github.io/ai-news-daily/)
 - 工作日早上定时在企业微信机器人发布相关日报：
 
-<img src="../../../public/images/blog/ai自动化/ai日报机器人推送.png" alt="ai日报机器人推送结果">
+<img src="../../images/blog/ai自动化/ai日报机器人推送.png" alt="ai日报机器人推送结果">
 
 使用工具：
 - 自动化抓取信息：codex/claude
@@ -50,7 +50,7 @@ Claude -> github -> 通过action -> webhook
 然后通过github的 actions 触发一个工作流，往企微推消息
 这样 Git 就成了内容版本库，HTML 直接由 GitHub Pages 承载，不需要数据库、CMS 或服务器。
 
-<img src="../../../public/images/blog/ai自动化/github-actions.png" alt="github-actions">
+<img src="../../images/blog/ai自动化/github-actions.png" alt="github-actions">
 
 --许多次部署成功但是企微并没有推送日报，经过排查发现是因为Pages 发布有延迟，因此必须保留 HTTP 200 轮询和 webhook 重试。
 
