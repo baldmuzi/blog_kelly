@@ -82,7 +82,7 @@ function goToPage(page: number) {
     <div class="archive-main">
       <ol v-if="pagedPosts.length" class="article-list">
         <li v-for="post in pagedPosts" :key="post.slug" class="article-row">
-          <a class="article-row__link" :href="`${blogPath}/${post.slug}`">
+          <a class="article-row__link" :href="`${blogPath}${post.slug}/`">
             <div class="article-row__meta">
               <time :datetime="post.dateISO">{{ post.dateLabel }}</time>
               <span class="article-row__category">{{ post.category }}</span>

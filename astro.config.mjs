@@ -9,7 +9,7 @@ const isGitHubPagesBuild = process.env.GITHUB_ACTIONS === 'true'
 
 export default defineConfig({
   output: 'static',
-  trailingSlash: 'always',
+  trailingSlash: 'ignore',
   site: isGitHubPagesBuild ? `https://${owner}.github.io/${repository}/` : undefined,
   base: isGitHubPagesBuild ? `/${repository}` : '',
   integrations: [vue(), react()],

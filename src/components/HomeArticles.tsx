@@ -62,7 +62,7 @@ export default function HomeArticles({ posts, categories, blogPath }: Props) {
         <ol className="article-list">
           {filtered.slice(0, 5).map((post) => (
             <li key={post.slug} className="article-row">
-              <a className="article-row__link" href={`${blogPath}/${post.slug}`}>
+              <a className="article-row__link" href={`${blogPath}${post.slug}/`}>
                 <div className="article-row__meta">
                   <time dateTime={post.dateISO}>{post.dateLabel}</time>
                   <span className="article-row__category">{post.category}</span>
